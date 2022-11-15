@@ -16,6 +16,7 @@ import {
   Text,
   useColorScheme,
   View,
+  Button,
 } from 'react-native';
 
 import {
@@ -28,6 +29,18 @@ import {
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
+import { useState } from 'react';
+
+
+const testCounter = () => {  const [count, setCount] = useState(0);
+  return (    
+    <View style={styles.sectionContainer}>      
+      <Text>You clicked {count} times</Text>      
+      <Button        onPress={() => setCount(count + 1)}        title="Click me!"      />    
+    </View>
+  );};
+// React Native Styles
+
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
