@@ -5,30 +5,40 @@ import {
   View,
   Button,
 } from 'react-native';
+
 import { useState } from 'react';
 
-
-const TestCounter = () => {
-  const [count, setCount] = useState(0);
-  return (
-    <>
-      <View style={styles.sectionContainer}>
-        <Text>You clicked {count} times</Text>
-        <Button onPress={() => setCount(count + 1)} title="Click me!" />
-      </View>
-    </>
-  );
-};
-
 const App = () => {
+  const [count, setCount] = useState(0);
+
+  const startCounter = () => {
+    setInterval(() => {
+      setCount(count => count + 1)
+    }, 1000);
+  };
+
+  const stopCounter = () => {
+    clearInterval(setCount(0));
+  };
+
+  const TestCounter = () => {
+    return (
+      <>
+        <View style={styles.sectionContainer}>
+          <Text id="counter">You clicked {count} times</Text>
+          <Button onPress={() => startCounter()}
+            title="Start Counter" />
+          <Button onPress={() => stopCounter()}
+            title="Stop Counter" />
+        </View>
+      </>
+    );
+  };
 
   return (
     <TestCounter />
   );
-};
-
-// React Native Styles
-
+}
 
 const styles = StyleSheet.create({
   sectionContainer: {
