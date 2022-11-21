@@ -10,22 +10,24 @@ import { useState } from 'react';
 
 const App = () => {
   const [count, setCount] = useState(0);
+  const [handler, setHandler] = useState(null);
 
   const startCounter = () => {
-    setInterval(() => {
+    let val = setInterval(() => {
       setCount(count => count + 1)
     }, 1000);
+    setHandler(val)
   };
 
   const stopCounter = () => {
-    clearInterval(setCount(0));
+    clearInterval(handler);
   };
 
   const TestCounter = () => {
     return (
       <>
         <View style={styles.sectionContainer}>
-          <Text id="counter">You clicked {count} times</Text>
+          <Text style={{ fontSize: 30 }}>You clicked {count} times</Text>
           <Button onPress={() => startCounter()}
             title="Start Counter" />
           <Button onPress={() => stopCounter()}
