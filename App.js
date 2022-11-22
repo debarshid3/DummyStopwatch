@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-} from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
 import { useState } from 'react';
 
@@ -13,18 +8,25 @@ const App = () => {
   const [lapId, setLapId] = useState(0);
   const [span, setSpan] = useState(0);
   const [lap, setLap] = useState(0);
+  const [lapMap, setLapMap] = useState([]);
+  const [state, setState] = useState("zero");
   const [handler, setHandler] = useState(null);
-  const [isVisible, setVisibility] = useState(null);
+  const [title, setTitle] = useState("Start Counter");
 
-  const startCounter = () => {
-    let val = setInterval(() => {
-      setCount(count => count + 1)
-    }, 1000);
-    setHandler(val);
-  };
-
-  const stopCounter = () => {
-    clearInterval(handler);
+  const toggleCounter = () => {
+    if (state == "zero" || state == "paused") {
+      let val = setInterval(() => {
+        setCount((count) => count + 1);
+      }, 1000);
+      setHandler(val);
+      setState("running");
+      setTitle("Stop Counter");
+    }
+    if (state == "running") {
+      clearInterval(handler);
+      setState("paused");
+      setTitle("Start Counter");
+    }
   };
 
   const resetCounter = () => {
@@ -33,21 +35,17 @@ const App = () => {
     setLapId(0);
     setLap(0);
     setSpan(0);
-    setVisibility(null);
+    setLapMap([]);
+    setState("zero");
+    setTitle("Start Counter");
   };
 
   const lapCounter = () => {
-    setVisibility("show");
-    setLapId(lapId + 1);
-    setLap(count);
-    setSpan(count-lap);
-    if(isVisible!=null)
-    {
-      return(
-        <View>
-          <Text style={{ fontSize: 30 }}>#{lapId}. Lap: {span} | Click: {lap}</Text>
-        </View>
-      );
+    if (state == "running") {
+      setLapMap([...lapMap, lapId + 1, count - lap, count]);
+      setLapId(lapId + 1);
+      setLap(count);
+      setSpan(count - lap);
     }
   };
 
@@ -55,32 +53,32 @@ const App = () => {
     return (
       <>
         <View style={styles.sectionContainer}>
-          <Text style={{ fontSize: 30 }}>You clicked {count} times</Text>
-          <Button onPress={() => startCounter()}
-            title="Start Counter" />
-          <Button onPress={() => stopCounter()}
-            title="Stop Counter" />
-          <Button onPress={() => resetCounter()}
-            title="Reset Counter" />
-          <Button onPress={() => lapCounter()}
-            title="Lap Counter" />
+          <Text style={{ fontSize: 30 }}>{count} </Text>
         </View>
         <View>
-          <Text style={{ fontSize: 30 }}>#{lapId}. Lap: {span} | Click: {lap}</Text>
+          <Button onPress={() => toggleCounter()} title={title} />
+          <Button onPress={() => resetCounter()} title="Reset Counter" />
+          <Button onPress={() => lapCounter()} title="Lap Counter" />
+        </View>
+        <View>
+          <Text>
+            {lapMap.map((subItems) => {
+              return <Text> {subItems} </Text>;
+            })}
+          </Text>
         </View>
       </>
     );
   };
 
-  return (
-    <TestCounter />
-  );
-}
+  return <TestCounter />;
+};
 
 const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
+    alignItems: 'center',
   },
 });
 
