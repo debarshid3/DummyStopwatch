@@ -42,10 +42,10 @@ const App = () => {
 
   const lapCounter = () => {
     if (state == "running") {
-      setLapMap([...lapMap, lapId + 1, count - lap, count]);
       setLapId(lapId + 1);
       setLap(count);
       setSpan(count - lap);
+      setLapMap([...lapMap, `#${lapId}, Span:${span}, Count:${count}`]);
     }
   };
 
@@ -57,15 +57,13 @@ const App = () => {
         </View>
         <View>
           <Button onPress={() => toggleCounter()} title={title} />
-          <Button onPress={() => resetCounter()} title="Reset Counter" />
+          <Button onPress={() => resetCounter()} disabled = {state == "zero"} title="Reset Counter" />
           <Button onPress={() => lapCounter()} title="Lap Counter" />
         </View>
         <View>
-          <Text>
-            {lapMap.map((subItems) => {
-              return <Text> {subItems} </Text>;
+            {lapMap.map((subItems, index) => {
+              return <Text key={index}> {subItems} </Text>;
             })}
-          </Text>
         </View>
       </>
     );
